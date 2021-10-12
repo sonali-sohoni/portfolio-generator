@@ -1,10 +1,11 @@
 const profileDataArgs = process.argv.slice(2, process.argv.length);
-console.log("1", profileDataArgs);
+const fs = require("fs");
+const generatePage = require("./src/page-template.js");
+console.log(generatePage);
+//Assignment destructuring
+const [name1, gitHub] = profileDataArgs;
 
-const printProfileData = (profileDataArr) => {
-	profileDataArr.forEach((element) => {
-		console.log(element);
-	});
-};
-
-printProfileData(profileDataArgs);
+fs.writeFile("index.html", generatePage(name1, gitHub), (err) => {
+	if (err) throw err;
+	console.log("Portfolio complete checkout index.html");
+});
