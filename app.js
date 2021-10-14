@@ -15,16 +15,41 @@ const prompUser = () => {
 			type: "input",
 			name: "name",
 			message: "What is your name?",
+			validate: (userInput) => {
+				if (userInput) {
+					return true;
+				} else {
+					console.log("Please enter user name. [required]");
+					return false;
+				}
+			},
 		},
 		{
 			type: "input",
 			name: "github",
-			message: "Enter your GitHub Username",
+			message: "Enter your GitHub Username. [required]",
+			validate: (uname) => {
+				if (uname) return true;
+				else {
+					console.log("Please enter GitHub username");
+				}
+			},
+		},
+		{
+			type: "confirm",
+			name: "confirmAbout",
+			message:
+				'Would you like to enter some information about yourself for an "About" section?',
+			default: true,
 		},
 		{
 			type: "input",
 			name: "about",
-			message: "Provide some information about yourself",
+      message: "Provide some information about yourself",
+      when: ({ confirmAbout }) => {
+        if (confirmAbout) return true;
+        else return false;
+      }
 		},
 	]);
 };
@@ -49,12 +74,27 @@ const promptProject = (portfolioData) => {
 			{
 				type: "input",
 				name: "name",
-				message: "What is your project name?",
+				message: "What is your project name? [required]",
+				validate: (projectName) => {
+					if (projectName) return true;
+					else {
+						console.log("Please enter the project name.");
+						return false;
+					}
+				},
 			},
 			{
 				type: "input",
 				name: "description",
 				message: "Provide description of your project [required]",
+				validate: (desc) => {
+					if (desc) {
+						return true;
+					} else {
+						console.log("Please enter the valid description.");
+						return false;
+					}
+				},
 			},
 			{
 				type: "checkbox",
@@ -74,6 +114,13 @@ const promptProject = (portfolioData) => {
 				type: "input",
 				name: "link",
 				message: "Enter the GitHub link for your project. [Required]",
+				validate: (link) => {
+					if (link) return true;
+					else {
+						console.log("Return project link of the project");
+						return false;
+					}
+				},
 			},
 			{
 				type: "confirm",
