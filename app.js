@@ -1,4 +1,7 @@
 const inquirer = require("inquirer");
+const fs = require("fs");
+const generatePage = require("./src/page-template.js");
+
 // inquirer
 // 	.prompt([
 // 		{
@@ -45,11 +48,11 @@ const prompUser = () => {
 		{
 			type: "input",
 			name: "about",
-      message: "Provide some information about yourself",
-      when: ({ confirmAbout }) => {
-        if (confirmAbout) return true;
-        else return false;
-      }
+			message: "Provide some information about yourself",
+			when: ({ confirmAbout }) => {
+				if (confirmAbout) return true;
+				else return false;
+			},
 		},
 	]);
 };
@@ -143,19 +146,33 @@ const promptProject = (portfolioData) => {
 		});
 };
 
+const mockData = {
+	name: "Learnatino",
+	github: "learnationo",
+	about: "Hello this is me",
+	projects: [
+		{
+			name: "run buddy",
+			description: "runbuddy desc",
+			languages: ["JS", "jQuery", "Node.js"],
+			link: "runbuddy link",
+			feature: true,
+			confirmAddProject: false,
+		},
+	],
+};
+//const pageHTML = generatePage(mockData);
+
 prompUser()
 	.then(promptProject)
 	.then((portfolioData) => {
-		console.log(portfolioData);
+		const pageHTML = generatePage(portfolioData);
+
+		fs.writeFile("./index.html", pageHTML, (err) => {
+			if (err) throw new Error(err);
+
+			console.log(
+				"Page created! Check out index.html in this directory to see it!"
+			);
+		});
 	});
-
-// const fs = require("fs");
-// const generatePage = require("./src/page-template.js");
-// console.log(generatePage);
-// //Assignment destructuring
-// const [name1, gitHub] = profileDataArgs;
-
-// fs.writeFile("index.html", generatePage(name1, gitHub), (err) => {
-// 	if (err) throw err;
-// 	console.log("Portfolio complete checkout index.html");
-// });
