@@ -1,5 +1,7 @@
 const inquirer = require("inquirer");
-const fs = require("fs");
+//const generateSite = require("./utils/generate-site.js");
+//SHORTHAND
+const { writeFile, copyFile } = require("./utils/generate-site.js");
 const generatePage = require("./src/page-template.js");
 
 // inquirer
@@ -146,33 +148,36 @@ const promptProject = (portfolioData) => {
 		});
 };
 
-const mockData = {
-	name: "Learnatino",
-	github: "learnationo",
-	about: "Hello this is me",
-	projects: [
-		{
-			name: "run buddy",
-			description: "runbuddy desc",
-			languages: ["JS", "jQuery", "Node.js"],
-			link: "runbuddy link",
-			feature: true,
-			confirmAddProject: false,
-		},
-	],
-};
-//const pageHTML = generatePage(mockData);
-
 prompUser()
 	.then(promptProject)
 	.then((portfolioData) => {
-		const pageHTML = generatePage(portfolioData);
-
-		fs.writeFile("./index.html", pageHTML, (err) => {
-			if (err) throw new Error(err);
-
-			console.log(
-				"Page created! Check out index.html in this directory to see it!"
-			);
-		});
+		return generatePage(portfolioData);
+	})
+	.then((pageHTML) => {
+		return writeFile(pageHTML);
+	})
+	.then((writeFileResponse) => {
+		console.log(writeFileResponse);
+		return copyFile();
+	})
+	.then((copyFileResponse) => {
+		console.log(copyFileResponse);
+	})
+	.catch((err) => {
+		console.log(err);
 	});
+// 	fs.writeFile("./dist/index.html", pageHTML, (err) => {
+// 		if (err) throw new Error(err);
+
+// 		console.log(
+// 			"Page created! Check out index.html in this directory to see it!"
+// 		);
+
+// 		//copy ./src/style.css to ./dist/style.css
+
+// 		fs.copyFile("./src/style.css", "./dist/style.css", (err) => {
+// 			if (err) throw err;
+// 			console.log("Stylesheet copied successfully");
+// 		});
+// 	});
+// });
